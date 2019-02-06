@@ -1,0 +1,17 @@
+- hosts: localhost
+  roles:
+    - ansible-modules-orion
+  tasks:
+    orion_ipam_query:
+      api_url: "{{ orion_api_url }}"
+      username: "{{ orion_username }}"
+      password: "{{ orion_password }}"
+      query: >
+        SELECT TOP 1 I.IpAddress 
+        FROM IPAM.IPNode I
+        WHERE Status=2 
+        AND I.Subnet.DisplayName='{{ ipam_subnet }}'
+    register: next_free_ip
+    
+  - debug:
+      var: next_free_ip
